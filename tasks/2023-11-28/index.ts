@@ -14,19 +14,26 @@ export type ProcessedBirdData = {
 export function processBirdObservations(observations: BirdObservation[]): ProcessedBirdData {
   const result: ProcessedBirdData = {};
   for (let i = 0; i < observations.length; i++) {
-    const currentObservations = observations[i];
+    const currentObservation = observations[i];
     if (!(observations[i].name in result)) {
-      result[currentObservations.name] = {
-        dates: [String(currentObservations.date)],
-        averageCoordinates: currentObservations.coordinates,
+      result[currentObservation.name] = {
+        dates: [String(currentObservation.date)],
+        averageCoordinates: currentObservation.coordinates,
       };
     }
     else {
-        const currentName = currentObservations.name
-        const currentLatitude = result.averageCoordinates.latitude
-        result.currentName.dates.push(currentObservations.date)
-        result.currentName.averageCoordinates.latitude = 
-    }
+      const currentName = currentObservation.name;
+      const currentDate = currentObservation.date
+      let currentLatitude = currentObservation.coordinates.latitude;
+      let currentLongitude = currentObservation.coordinates.longitude;
+      let latitudeToChange = result[currentName].averageCoordinates.latitude;
+      let longitudeToChange = result[currentName].averageCoordinates.longitude;
+      
+      result[currentName].dates.push(currentDate)
+      result[currentName].averageCoordinates.latitude = (latitudeToChange + currentLatitude) / 2
+      result[currentName].averageCoordinates.longitude = (longitudeToChange + currentLongitude) / 2
+
+  }
   }
   return result;
 }
